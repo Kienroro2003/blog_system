@@ -19,33 +19,51 @@ services:
     volumes:
       - ./services/user-service:/code
     environment:
-      - DATABASE_URL=mysql+mysqlconnector://root:password@db/user_db # Kết nối tới MySQL
+      # Kết nối tới database riêng cho user
+      - DATABASE_URL=mysql+mysqlconnector://root:password@db_user/user_db
+      - JWT_SECRET_KEY=your-super-secret-key
     depends_on:
-      - db # Đảm bảo mysql khởi động trước
+      - db_user # Phụ thuộc vào db_user
 
   news-service:
     build: ./services/news-service
     volumes:
       - ./services/news-service:/code
+    environment:
+      # Kết nối tới database riêng cho news
+      - DATABASE_URL=mysql+mysqlconnector://root:password@db_news/news_db
+      - JWT_SECRET_KEY=your-super-secret-key
+    depends_on:
+      - db_news # Phụ thuộc vào db_news
 
   search-service:
     build: ./services/search-service
     volumes:
       - ./services/search-service:/code
 
-  # --- Database Service ---
-  db:
+  # --- Database Services ---
+  db_user: # Đổi tên db thành db_user cho rõ ràng
     image: mysql:8.0
-    cap_add:
-      - SYS_NICE
     restart: always
     environment:
       - MYSQL_DATABASE=user_db
       - MYSQL_ROOT_PASSWORD=password
     ports:
-      - "3306:3306"
+      - "3306:3306" # Port cho user DB
     volumes:
-      - db-data:/var/lib/mysql
+      - db-user-data:/var/lib/mysql
+
+  db_news: # <<<<< Service database MỚI cho news-service
+    image: mysql:8.0
+    restart: always
+    environment:
+      - MYSQL_DATABASE=news_db
+      - MYSQL_ROOT_PASSWORD=password
+    ports:
+      - "3307:3306" # Expose ra một port khác trên máy host để tránh xung đột
+    volumes:
+      - db-news-data:/var/lib/mysql
 
 volumes:
-  db-data:
+  db-user-data: # Volume cho user DB
+  db-news-data: # Volume cho news DB
