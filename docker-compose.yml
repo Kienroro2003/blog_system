@@ -1,0 +1,30 @@
+# docker-compose.yml
+
+version: "3.8"
+
+services:
+  # --- API Gateway Service ---
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:80" # Truy cập hệ thống từ http://localhost:8080
+    depends_on:
+      - user-service
+      - news-service
+      - search-service
+
+  # --- Backend Services ---
+  user-service:
+    build: ./services/user-service
+    volumes:
+      - ./services/user-service:/code # Đồng bộ code để live-reload
+
+  news-service:
+    build: ./services/news-service
+    volumes:
+      - ./services/news-service:/code
+
+  search-service:
+    build: ./services/search-service
+    volumes:
+      - ./services/search-service:/code

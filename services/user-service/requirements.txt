@@ -1,0 +1,6 @@
+# services/user-service/requirements.txt
+# services/news-service/requirements.txt
+# services/search-service/requirements.txt
+
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
