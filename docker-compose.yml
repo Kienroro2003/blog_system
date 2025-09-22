@@ -7,7 +7,7 @@ services:
   api-gateway:
     build: ./api-gateway
     ports:
-      - "8080:80" # Truy cập hệ thống từ http://localhost:8080
+      - "8080:80"
     depends_on:
       - user-service
       - news-service
@@ -17,7 +17,11 @@ services:
   user-service:
     build: ./services/user-service
     volumes:
-      - ./services/user-service:/code # Đồng bộ code để live-reload
+      - ./services/user-service:/code
+    environment:
+      - DATABASE_URL=mysql+mysqlconnector://root:password@db/user_db # Kết nối tới MySQL
+    depends_on:
+      - db # Đảm bảo mysql khởi động trước
 
   news-service:
     build: ./services/news-service
@@ -28,3 +32,20 @@ services:
     build: ./services/search-service
     volumes:
       - ./services/search-service:/code
+
+  # --- Database Service ---
+  db:
+    image: mysql:8.0
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      - MYSQL_DATABASE=user_db
+      - MYSQL_ROOT_PASSWORD=password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:

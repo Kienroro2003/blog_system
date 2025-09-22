@@ -1,10 +1,8 @@
 # services/user-service/app/main.py
 
-from fastapi import FastAPI
+from app import create_app
 
-app = FastAPI()
+app = create_app()
 
-
-@app.get("/api/users/")
-def read_root():
-    return {"message": "👋 Hello from User Service"}
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000)

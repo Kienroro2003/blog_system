@@ -1,6 +1,12 @@
 # services/user-service/requirements.txt
-# services/news-service/requirements.txt
-# services/search-service/requirements.txt
 
-fastapi==0.111.0
-uvicorn[standard]==0.29.0
+Flask==2.2.2
+Flask-SQLAlchemy==2.5.1
+SQLAlchemy==1.4.46  # <--- Thêm dòng này vào
+Flask-Migrate==3.1.0
+mysql-connector-python==8.0.30
+PyJWT==2.6.0
+bcrypt==4.0.1
+python-dotenv==0.21.0
+gunicorn==23.0.0
+Werkzeug==2.2.2
