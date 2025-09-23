@@ -24,6 +24,7 @@ services:
       - JWT_SECRET_KEY=your-super-secret-key
     depends_on:
       - db_user # Phụ thuộc vào db_user
+    restart: always # Thêm dòng này
 
   news-service:
     build: ./services/news-service
@@ -35,6 +36,7 @@ services:
       - JWT_SECRET_KEY=your-super-secret-key
     depends_on:
       - db_news # Phụ thuộc vào db_news
+    restart: always # Thêm dòng này
 
   search-service:
     build: ./services/search-service

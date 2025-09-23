@@ -19,6 +19,8 @@ def create_app():
     # Khởi tạo db và migrate
     db.init_app(app)
     migrate.init_app(app, db)
+    with app.app_context():
+        db.create_all()
 
     # Đăng ký blueprint
     app.register_blueprint(auth_blueprint, url_prefix="/api/users")
